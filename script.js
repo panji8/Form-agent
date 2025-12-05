@@ -1,5 +1,5 @@
 // Replace with your Apps Script web app URL (deployed)
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwts129_wXtH3l6oY3uDGUqK32G5REdTdjQlZyDXkNzIbW7fV8CCVWkqTZ5REEoTWyX/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJ_deaRCzIkUyu7K3dlAPn6DKoI1_fC21Kpt7DFeKM36khsKb7iaimu1FNH3-Uo-6h/exec";
 
 document.getElementById("orderForm").addEventListener("submit", async function(e){
   e.preventDefault();
@@ -20,3 +20,4 @@ document.getElementById("orderForm").addEventListener("submit", async function(e
     alert("Gagal mengirim order: " + err);
   }
 });
+
