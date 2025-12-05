@@ -7,51 +7,54 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <div class="logo">✓</div>
-      <div>
-        <h1>Form Order</h1>
-        <p class="muted">Buat order baru & kirim ke agent</p>
-      </div>
-    </header>
 
-    <main class="card">
-      <form id="orderForm">
-        <label>Biaya</label>
-        <input name="biaya" placeholder="30000" required>
+<div class="container">
+  <header class="header">
+    <div class="logo">✓</div>
+    <div>
+      <h1>Form Order</h1>
+      <p class="muted">Buat order baru & kirim ke agent</p>
+    </div>
+  </header>
 
-        <label>Kapan</label>
-        <input type="date" name="kapan" required>
+  <main class="card">
+    <form id="orderForm">
 
-        <label>Nama</label>
-        <input name="nama" placeholder="Nama Customer" required>
+      <label>Biaya</label>
+      <input id="biaya" name="biaya" placeholder="30000" required>
 
-        <label>No HP</label>
-        <input name="hp" placeholder="6289..." required>
+      <label>Kapan</label>
+      <input id="kapan" type="date" name="kapan" required>
 
-        <label>Deskripsi</label>
-        <textarea name="deskripsi" placeholder="Catatan / kebutuhan"></textarea>
+      <label>Nama</label>
+      <input id="nama" name="nama" placeholder="Nama Customer" required>
 
-        <label>Titik Jemput</label>
-        <input name="jemput" placeholder="Alamat jemput">
+      <label>No HP</label>
+      <input id="hp" name="hp" placeholder="6289..." required>
 
-        <label>Titik Antar</label>
-        <input name="antar" placeholder="Alamat antar">
+      <label>Deskripsi</label>
+      <textarea id="deskripsi" name="deskripsi" placeholder="Catatan / kebutuhan"></textarea>
 
-        <label>Agent</label>
-        <select name="agent" required>
-          <option value="">-- pilih agent --</option>
-          <option value="Suruhboy">Suruhboy</option>
-          <option value="Agent A">Agent A</option>
-          <option value="Agent B">Agent B</option>
-        </select>
+      <label>Titik Jemput</label>
+      <input id="jemput" name="jemput" placeholder="Alamat jemput">
 
-        <button type="submit" class="primary">SUBMIT ORDER</button>
-      </form>
-    </main>
-  </div>
+      <label>Titik Antar</label>
+      <input id="antar" name="antar" placeholder="Alamat antar">
 
-  <script src="script.js"></script>
+      <label>Agent</label>
+      <select id="agent" name="agent" required>
+        <option value="">-- pilih agent --</option>
+        <option value="Suruhboy">Suruhboy</option>
+        <option value="Agent A">Agent A</option>
+        <option value="Agent B">Agent B</option>
+      </select>
+
+      <button type="submit" class="primary">SUBMIT ORDER</button>
+
+    </form>
+  </main>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
