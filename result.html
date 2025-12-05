@@ -7,42 +7,43 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container center">
-    <div class="card result-card">
-      <h2>🟦 ORDER MASUK</h2>
-      <pre id="templateBox">Memuat...</pre>
-      <a id="chatBtn" class="chat-btn" target="_blank" rel="noopener">CHAT TO AGENT</a>
-    </div>
+
+<div class="container center">
+  <div class="card result-card">
+    <h2>🟦 ORDER MASUK</h2>
+
+    <pre id="templateBox">Memuat...</pre>
+
+    <!-- GANTI DENGAN LINK GRUP WA KAMU -->
+    <a 
+      id="chatBtn"
+      class="chat-btn"
+      href="https://chat.whatsapp.com/FCXNaWaM0aCHhU85avPC2I"
+      target="_blank"
+      rel="noopener"
+    >
+      CHAT KE GRUP AGENT
+    </a>
   </div>
+</div>
 
-  <script>
-    // read ?row= from url
-    const params = new URLSearchParams(window.location.search);
-    const row = params.get("row"); // if omitted will use last row
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwts129_wXtH3l6oY3uDGUqK32G5REdTdjQlZyDXkNzIbW7fV8CCVWkqTZ5REEoTWyX/exec";
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJ_deaRCzIkUyu7K3dlAPn6DKoI1_fC21Kpt7DFeKM36khsKb7iaimu1FNH3-Uo-6h/exec";
+  fetch(SCRIPT_URL)
+    .then(r => r.json())
+    .then(data => {
+      if (data.error) {
+        document.getElementById("templateBox").textContent = "Error: " + data.message;
+        return;
+      }
+      document.getElementById("templateBox").textContent =
+        data.template || "Template tidak tersedia";
+    })
+    .catch(err => {
+      document.getElementById("templateBox").textContent = "Gagal memuat: " + err;
+    });
+</script>
 
-    // fetch JSON from Apps Script
-    fetch(`${SCRIPT_URL}?row=${encodeURIComponent(row || "")}`)
-      .then(r => r.json())
-      .then(data => {
-        if (data.error) {
-          document.getElementById("templateBox").textContent = "Error: " + data.message;
-          document.getElementById("chatBtn").style.display = "none";
-          return;
-        }
-        document.getElementById("templateBox").textContent = data.template || "Tidak ada template";
-        if (data.wa) {
-          document.getElementById("chatBtn").href = data.wa;
-        } else {
-          document.getElementById("chatBtn").style.display = "none";
-        }
-      })
-      .catch(err => {
-        document.getElementById("templateBox").textContent = "Gagal memuat: " + err;
-        document.getElementById("chatBtn").style.display = "none";
-      });
-  </script>
 </body>
 </html>
-
