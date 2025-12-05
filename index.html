@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Form Order - SuruhBoy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo">✓</div>
+      <div>
+        <h1>Form Order</h1>
+        <p class="muted">Buat order baru & kirim ke agent</p>
+      </div>
+    </header>
+
+    <main class="card">
+      <form id="orderForm">
+        <label>Biaya</label>
+        <input name="biaya" placeholder="30000" required>
+
+        <label>Kapan</label>
+        <input type="date" name="kapan" required>
+
+        <label>Nama</label>
+        <input name="nama" placeholder="Nama Customer" required>
+
+        <label>No HP</label>
+        <input name="hp" placeholder="6289..." required>
+
+        <label>Deskripsi</label>
+        <textarea name="deskripsi" placeholder="Catatan / kebutuhan"></textarea>
+
+        <label>Titik Jemput</label>
+        <input name="jemput" placeholder="Alamat jemput">
+
+        <label>Titik Antar</label>
+        <input name="antar" placeholder="Alamat antar">
+
+        <label>Agent</label>
+        <select name="agent" required>
+          <option value="">-- pilih agent --</option>
+          <option value="Suruhboy">Suruhboy</option>
+          <option value="Agent A">Agent A</option>
+          <option value="Agent B">Agent B</option>
+        </select>
+
+        <button type="submit" class="primary">SUBMIT ORDER</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Order Masuk - SuruhBoy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container center">
+    <div class="card result-card">
+      <h2>🟦 ORDER MASUK</h2>
+      <pre id="templateBox">Memuat...</pre>
+      <a id="chatBtn" class="chat-btn" target="_blank" rel="noopener">CHAT TO AGENT</a>
+    </div>
+  </div>
+
+  <script>
+    // read ?row= from url
+    const params = new URLSearchParams(window.location.search);
+    const row = params.get("row"); // if omitted will use last row
+
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwts129_wXtH3l6oY3uDGUqK32G5REdTdjQlZyDXkNzIbW7fV8CCVWkqTZ5REEoTWyX/exec";
+
+    // fetch JSON from Apps Script
+    fetch(`${SCRIPT_URL}?row=${encodeURIComponent(row || "")}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById("templateBox").textContent = "Error: " + data.message;
+          document.getElementById("chatBtn").style.display = "none";
+          return;
+        }
+        document.getElementById("templateBox").textContent = data.template || "Tidak ada template";
+        if (data.wa) {
+          document.getElementById("chatBtn").href = data.wa;
+        } else {
+          document.getElementById("chatBtn").style.display = "none";
+        }
+      })
+      .catch(err => {
+        document.getElementById("templateBox").textContent = "Gagal memuat: " + err;
+        document.getElementById("chatBtn").style.display = "none";
+      });
+  </script>
+</body>
+</html>
