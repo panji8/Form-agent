@@ -1,50 +1,23 @@
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8">
-  <title>Order Masuk - SuruhBoy</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<div class="container center">
-  <div class="card result-card">
-    <h2>🟦 ORDER MASUK</h2>
-
-    <pre id="templateBox">Memuat...</pre>
-
-    <!-- GANTI DENGAN LINK GRUP WA KAMU -->
-    <a 
-      id="chatBtn"
-      class="chat-btn"
-      href="https://chat.whatsapp.com/FCXNaWaM0aCHhU85avPC2I"
-      target="_blank"
-      rel="noopener"
-    >
-      CHAT KE GRUP AGENT
-    </a>
-  </div>
-</div>
-
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwts129_wXtH3l6oY3uDGUqK32G5REdTdjQlZyDXkNzIbW7fV8CCVWkqTZ5REEoTWyX/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwts129_wXtH3l6oY3uDGUqK32G5REdTdjQlZyDXkNzIbW7fV8CCVWkqTZ5REEoTWyX/exec";
 
-  fetch(SCRIPT_URL)
-    .then(r => r.json())
-    .then(data => {
-      if (data.error) {
-        document.getElementById("templateBox").textContent = "Error: " + data.message;
-        return;
-      }
-      document.getElementById("templateBox").textContent =
-        data.template || "Template kosonng";
-    })
-    .catch(err => {
-      document.getElementById("templateBox").textContent = "Gagal memuat: " + err;
-    });
+fetch(SCRIPT_URL)
+  .then(res => res.json())
+  .then(data => {
+    console.log("API DATA:", data); // debug
+
+    if (!data.template) {
+      document.getElementById("templateBox").textContent = "Template kosong / gagal dimuat";
+      return;
+    }
+
+    // TAMPILKAN TEMPLATE
+    document.getElementById("templateBox").textContent = data.template;
+
+    // TOMBOL WA KE GRUP (SESUAI PERMINTAAN KAMU)
+    document.getElementById("chatBtn").href = "https://chat.whatsapp.com/GANTI_LINK_GRUP_KAMU";
+  })
+  .catch(err => {
+    document.getElementById("templateBox").textContent = "Gagal memuat: " + err;
+  });
 </script>
-
-</body>
-</html>
-
