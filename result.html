@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="utf-8">
-  <title>Order Masuk - SuruhBoy</title>
+  <title>Order Masuk</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,39 +14,25 @@
 
     <pre id="templateBox">Memuat...</pre>
 
-    <!-- GANTI DENGAN LINK GRUP WA KAMU -->
-    <a 
-      id="chatBtn"
-      class="chat-btn"
-      href="https://chat.whatsapp.com/FCXNaWaM0aCHhU85avPC2I"
-      target="_blank"
-      rel="noopener"
-    >
-      CHAT KE GRUP AGENT
-    </a>
+    <a id="chatBtn" class="chat-btn" target="_blank">CHAT KE AGENT</a>
   </div>
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJ_deaRCzIkUyu7K3dlAPn6DKoI1_fC21Kpt7DFeKM36khsKb7iaimu1FNH3-Uo-6h/exec";
+  const params = new URLSearchParams(window.location.search);
+  const template = params.get("template");
+  const wa = params.get("wa");
 
-  fetch(SCRIPT_URL)
-    .then(r => r.json())
-    .then(data => {
-      if (data.error) {
-        document.getElementById("templateBox").textContent = "Error: " + data.message;
-        return;
-      }
-      document.getElementById("templateBox").textContent =
-        data.template || "Template kosonng";
-    })
-    .catch(err => {
-      document.getElementById("templateBox").textContent = "Gagal memuat: " + err;
-    });
+  document.getElementById("templateBox").textContent =
+    template ? decodeURIComponent(template) : "Template kosong";
+
+  const btn = document.getElementById("chatBtn");
+  if (wa) {
+    btn.href = decodeURIComponent(wa);
+  } else {
+    btn.style.display = "none";
+  }
 </script>
 
 </body>
 </html>
-
-
-
