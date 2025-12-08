@@ -18,7 +18,12 @@
   </header>
 
   <main class="card">
-    <form id="orderForm">
+
+    <!-- ✅ FORM LANGSUNG POST KE APPS SCRIPT -->
+    <form 
+      method="POST"
+      action="https://script.google.com/macros/s/AKfycbxJ_deaRCzIkUyu7K3dlAPn6DKoI1_fC21Kpt7DFeKM36khsKb7iaimu1FNH3-Uo-6h/exec"
+    >
 
       <label>Biaya</label>
       <input id="biaya" name="biaya" placeholder="30000" required>
@@ -52,9 +57,10 @@
       <button type="submit" class="primary">SUBMIT ORDER</button>
 
     </form>
+
   </main>
 </div>
 
-<script src="script.js"></script>
+<!-- ❌ HAPUS script.js -->
 </body>
 </html>
