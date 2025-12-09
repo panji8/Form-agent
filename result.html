@@ -5,11 +5,64 @@
   <title>Order Masuk</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Tambahan styling khusus halaman result */
+    body {
+      background: #f4f5f7;
+    }
+
+    .result-card {
+      max-width: 600px;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.08);
+      background: white;
+    }
+
+    h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    #templateBox {
+      background: #f0f2f4;
+      padding: 16px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .chat-btn {
+      display: block;
+      margin-top: 20px;
+      padding: 14px;
+      background: #007bff;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .chat-btn:hover {
+      opacity: 0.9;
+    }
+
+    .center {
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container center">
-  <div class="card result-card">
+  <div class="result-card">
     <h2>🟦 ORDER MASUK</h2>
 
     <pre id="templateBox">Memuat...</pre>
