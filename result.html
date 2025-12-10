@@ -71,19 +71,20 @@
 </div>
 
 <script>
-  // Ambil parameter di URL
   const params = new URLSearchParams(window.location.search);
-
-  // TEMPLATE tetap digunakan seperti biasa
   const template = params.get("template");
 
-  document.getElementById("templateBox").textContent =
-    template ? decodeURIComponent(template) : "Template kosong";
+  // Jika tidak ada template → berarti user nge-refresh → kembalikan ke form
+  if (!template) {
+    window.location.href = "index.html"; 
+  }
 
-  // CTA SELALU KE GRUP — BUKAN KE NOMOR CUSTOMER
+  document.getElementById("templateBox").textContent =
+    decodeURIComponent(template);
+
+  // CTA langsung ke grup WA
   const groupLink = "https://chat.whatsapp.com/FCXNaWaM0aCHhU85avPC2I";
-  const btn = document.getElementById("chatBtn");
-  btn.href = groupLink;
+  document.getElementById("chatBtn").href = groupLink;
 </script>
 
 </body>
