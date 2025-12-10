@@ -2,7 +2,6 @@
   const params = new URLSearchParams(window.location.search);
   const template = params.get("template");
 
-  // Jika tidak ada template → user nge-refresh → balikin ke form
   if (!template) {
     window.location.href = "index.html";
   }
@@ -10,36 +9,35 @@
   document.getElementById("templateBox").textContent =
     decodeURIComponent(template);
 
-  // =========================
-  // FORCE WA BUSINESS (ANDROID)
-  // =========================
   const groupLink = "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
   const chatBtn = document.getElementById("chatBtn");
 
-  chatBtn.addEventListener("click", function (e) {
-    e.preventDefault();
+  if (chatBtn) {
+    chatBtn.addEventListener("click", function (e) {
+      const isAndroid = /Android/i.test(navigator.userAgent);
 
-    const isAndroid = /Android/i.test(navigator.userAgent);
+      if (isAndroid) {
+        e.preventDefault();
 
-    const groupCode = groupLink.replace(
-      "https://chat.whatsapp.com/",
-      ""
-    );
+        const groupCode = groupLink.replace(
+          "https://chat.whatsapp.com/",
+          ""
+        );
 
-    const waBusinessIntent =
-      "intent://chat.whatsapp.com/" +
-      groupCode +
-      "#Intent;package=com.whatsapp.w4b;scheme=https;end";
+        const waBusinessIntent =
+          "intent://chat.whatsapp.com/" +
+          groupCode +
+          "#Intent;package=com.whatsapp.w4b;scheme=https;end";
 
-    const waNormal = groupLink;
+        window.location.href = waBusinessIntent;
+      } else {
+        // iPhone & desktop → WA normal
+        window.location.href = groupLink;
+      }
+    });
+  }
 
-    // Android → WA Business | iPhone → WA Normal
-    window.location.href = isAndroid ? waBusinessIntent : waNormal;
-  });
-
-  // =========================
-  // TOMBOL COPY (ASLI KAMU)
-  // =========================
+  // COPY BUTTON (ASLI)
   const copyBtn = document.getElementById("copyBtn");
 
   copyBtn.addEventListener("click", async () => {
