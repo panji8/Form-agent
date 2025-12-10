@@ -19,10 +19,10 @@
 
   <main class="card">
 
-    <!-- ✅ FORM LANGSUNG POST KE APPS SCRIPT -->
+    <!-- FORM POST KE APPS SCRIPT -->
     <form 
       method="POST"
-      action="https://script.google.com/macros/s/AKfycbzMoHjYvf-qunV7vkykWOFtyuUzh668HSyxUt69J4i8Fyoeer69SaJEPTn_N3z7DR4i/exec"
+      action="https://script.google.com/macros/s/AKfycbz270lVBBxyx-e2Ccp4RiasvqR-rA1Jd_euUbfkyl9yKPmmiaAbSwRK1DU_1t8jYmuJ/exec"
     >
 
       <label>Biaya</label>
@@ -70,11 +70,42 @@
   </main>
 </div>
 
-<!-- ❌ HAPUS script.js -->
+
+<!-- ========================================= -->
+<!-- =========== VALIDASI BIAYA ============== -->
+<!-- ========================================= -->
+<script>
+  const biayaInput = document.getElementById("biaya");
+
+  // Hanya boleh angka + rb + j / juta
+  biayaInput.addEventListener("input", function () {
+    this.value = this.value
+      .toLowerCase()
+      .replace(/[^0-9rbjtau\s\-]/g, ""); 
+  });
+
+  biayaInput.addEventListener("blur", function () {
+    let raw = this.value.toLowerCase().trim();
+    let number = raw;
+
+    // 10rb → 10000
+    if (/^[0-9]+rb$/.test(raw)) {
+      number = parseInt(raw) * 1000;
+    }
+
+    // 1jt → 1000000
+    if (/^[0-9]+jt$/.test(raw)) {
+      number = parseInt(raw) * 1000000;
+    }
+
+    // 1juta → 1000000
+    if (/^[0-9]+juta$/.test(raw)) {
+      number = parseInt(raw) * 1000000;
+    }
+
+    this.value = number;
+  });
+</script>
+
 </body>
 </html>
-
-
-
-
-
