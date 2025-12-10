@@ -9,6 +9,7 @@
   <style>
     body {
       background: #f4f5f7;
+      font-family: system-ui, sans-serif;
     }
 
     .result-card {
@@ -22,31 +23,49 @@
     h2 {
       margin-top: 0;
       text-align: center;
+      font-size: 22px;
+      font-weight: 700;
     }
 
     #templateBox {
       background: #f0f2f4;
       padding: 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       white-space: pre-wrap;
       font-size: 15px;
-      line-height: 1.5;
+      line-height: 1.55;
+      border: 1px solid #e3e6e8;
     }
 
-    .chat-btn {
+    .btn {
       display: block;
-      margin-top: 20px;
+      margin-top: 16px;
       padding: 14px;
-      background: #007bff;
       color: white;
       text-align: center;
       border-radius: 10px;
       text-decoration: none;
       font-weight: 600;
+      transition: 0.15s;
+      cursor: pointer;
+      user-select: none;
     }
 
-    .chat-btn:hover {
+    /* CTA ke grup WA - warna biru */
+    #chatBtn {
+      background: #007bff;
+    }
+    #chatBtn:hover {
       opacity: 0.9;
+    }
+
+    /* Tombol copy - warna hijau */
+    #copyBtn {
+      background: #28a745;
+      border: none;
+    }
+    #copyBtn:active {
+      transform: scale(0.98);
     }
 
     .center {
@@ -66,7 +85,9 @@
 
     <pre id="templateBox">Memuat...</pre>
 
-    <a id="chatBtn" class="chat-btn" target="_blank">CHAT KE AGENT</a>
+    <button id="copyBtn" class="btn">COPY TEMPLATE</button>
+
+    <a id="chatBtn" class="btn" target="_blank">CHAT KE AGENT</a>
   </div>
 </div>
 
@@ -74,17 +95,39 @@
   const params = new URLSearchParams(window.location.search);
   const template = params.get("template");
 
-  // Jika tidak ada template → berarti user nge-refresh → kembalikan ke form
+  // Jika tidak ada template → user nge-refresh → balikin ke form
   if (!template) {
-    window.location.href = "index.html"; 
+    window.location.href = "index.html";
   }
 
   document.getElementById("templateBox").textContent =
     decodeURIComponent(template);
 
-  // CTA langsung ke grup WA
+  // CTA ke grup WA
   const groupLink = "https://chat.whatsapp.com/FCXNaWaM0aCHhU85avPC2I";
   document.getElementById("chatBtn").href = groupLink;
+
+  // Tombol COPY
+  const copyBtn = document.getElementById("copyBtn");
+
+  copyBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(
+        document.getElementById("templateBox").textContent
+      );
+
+      copyBtn.textContent = "✔ TERSALIN!";
+      copyBtn.style.background = "#1e7c33";
+
+      setTimeout(() => {
+        copyBtn.textContent = "COPY TEMPLATE";
+        copyBtn.style.background = "#28a745";
+      }, 1500);
+
+    } catch (err) {
+      alert("Gagal menyalin template!");
+    }
+  });
 </script>
 
 </body>
