@@ -1,61 +1,137 @@
-<script>
-  const params = new URLSearchParams(window.location.search);
-  const template = params.get("template");
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Order Masuk</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 
-  if (!template) {
-    window.location.href = "index.html";
-  }
+  <style>
+    body {
+      background: #f4f5f7;
+      font-family: system-ui, sans-serif;
+    }
 
-  document.getElementById("templateBox").textContent =
-    decodeURIComponent(template);
+    .result-card {
+      max-width: 600px;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.08);
+      background: white;
+    }
 
-  const groupLink = "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
-  const chatBtn = document.getElementById("chatBtn");
+    h2 {
+      margin-top: 0;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+    }
 
-  if (chatBtn) {
-    chatBtn.addEventListener("click", function (e) {
-      const isAndroid = /Android/i.test(navigator.userAgent);
+    #templateBox {
+      background: #f0f2f4;
+      padding: 16px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      font-size: 15px;
+      line-height: 1.55;
+      border: 1px solid #e3e6e8;
+    }
 
-      if (isAndroid) {
-        e.preventDefault();
+    .btn {
+      display: block;
+      margin-top: 16px;
+      padding: 14px;
+      color: white;
+      text-align: center;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.15s;
+      cursor: pointer;
+      user-select: none;
+    }
 
-        const groupCode = groupLink.replace(
-          "https://chat.whatsapp.com/",
-          ""
+    #chatBtn {
+      background: #007bff;
+    }
+
+    #chatBtn:hover {
+      opacity: 0.9;
+    }
+
+    #copyBtn {
+      background: #28a745;
+      border: none;
+    }
+
+    #copyBtn:active {
+      transform: scale(0.98);
+    }
+
+    .center {
+      display: flex;
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container center">
+    <div class="result-card">
+      <h2>🟦 ORDER MASUK</h2>
+
+      <pre id="templateBox">Memuat...</pre>
+
+      <button id="copyBtn" class="btn">COPY TEMPLATE</button>
+
+      <a id="chatBtn" class="btn" target="_blank">
+        CHAT KE AGENT
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const template = params.get("template");
+
+    // Jika tidak ada template → balikin ke form
+    if (!template) {
+      window.location.href = "index.html";
+    }
+
+    document.getElementById("templateBox").textContent =
+      decodeURIComponent(template);
+
+    // CTA ke grup WA
+    const groupLink = "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
+    document.getElementById("chatBtn").href = groupLink;
+
+    // Tombol COPY
+    const copyBtn = document.getElementById("copyBtn");
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(
+          document.getElementById("templateBox").textContent
         );
 
-        const waBusinessIntent =
-          "intent://chat.whatsapp.com/" +
-          groupCode +
-          "#Intent;package=com.whatsapp.w4b;scheme=https;end";
+        copyBtn.textContent = "✔ TERSALIN!";
+        copyBtn.style.background = "#1e7c33";
 
-        window.location.href = waBusinessIntent;
-      } else {
-        // iPhone & desktop → WA normal
-        window.location.href = groupLink;
+        setTimeout(() => {
+          copyBtn.textContent = "COPY TEMPLATE";
+          copyBtn.style.background = "#28a745";
+        }, 1500);
+
+      } catch (err) {
+        alert("Gagal menyalin template!");
       }
     });
-  }
+  </script>
 
-  // COPY BUTTON (ASLI)
-  const copyBtn = document.getElementById("copyBtn");
-
-  copyBtn.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(
-        document.getElementById("templateBox").textContent
-      );
-
-      copyBtn.textContent = "✔ TERSALIN!";
-      copyBtn.style.background = "#1e7c33";
-
-      setTimeout(() => {
-        copyBtn.textContent = "COPY TEMPLATE";
-        copyBtn.style.background = "#28a745";
-      }, 1500);
-
-    } catch (err) {
-      alert("Gagal menyalin template!");
-    }
-  });
-</script>
+</body>
+</html>
