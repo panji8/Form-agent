@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* Tambahan styling khusus halaman result */
     body {
       background: #f4f5f7;
     }
@@ -72,19 +71,19 @@
 </div>
 
 <script>
+  // Ambil parameter di URL
   const params = new URLSearchParams(window.location.search);
+
+  // TEMPLATE tetap digunakan seperti biasa
   const template = params.get("template");
-  const wa = params.get("wa");
 
   document.getElementById("templateBox").textContent =
     template ? decodeURIComponent(template) : "Template kosong";
 
+  // CTA SELALU KE GRUP — BUKAN KE NOMOR CUSTOMER
+  const groupLink = "https://chat.whatsapp.com/FCXNaWaM0aCHhU85avPC2I";
   const btn = document.getElementById("chatBtn");
-  if (wa) {
-    btn.href = decodeURIComponent(wa);
-  } else {
-    btn.style.display = "none";
-  }
+  btn.href = groupLink;
 </script>
 
 </body>
