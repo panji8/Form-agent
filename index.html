@@ -85,14 +85,44 @@ document.getElementById("orderForm").addEventListener("submit", async function(e
 
 🧑‍💼 Agent: ${form.get("agent")}`.trim();
 
+<script>
+// Submit form
+document.getElementById("myForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const template = generateTemplate(); // misal fungsi template kamu
   document.getElementById("templateBox").textContent = template;
   document.getElementById("resultCard").style.display = "block";
 
-  document.getElementById("chatBtn").href =
-    "intent://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc#Intent;scheme=https;package=com.whatsapp.w4b;end ";
+  // Event tombol chat
+  document.getElementById("chatBtn").onclick = function () {
+    openWABusiness();
+  };
 
   this.reset();
 });
+
+// FUNGSI BUKA WA BUSINESS + FALLBACK
+function openWABusiness() {
+  // Coba buka aplikasi WA Business
+  window.location = "whatsapp-business://";
+
+  // Fallback setelah 1.2 detik
+  setTimeout(function () {
+    var isAndroid = /Android/i.test(navigator.userAgent);
+    var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isAndroid) {
+      window.location =
+        "https://play.google.com/store/apps/details?id=com.whatsapp.w4b";
+    } else if (isIOS) {
+      window.location =
+        "https://apps.apple.com/app/id1393478319";
+    } else {
+      window.location = "https://www.whatsapp.com/business/";
+    }
+  }, 1200);
+}
 
 // Tombol copy
 document.getElementById("copyBtn").addEventListener("click", async () => {
@@ -114,4 +144,5 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
 </script>
 </body>
 </html>
+
 
