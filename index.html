@@ -1,82 +1,164 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Form Order - SuruhBoy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f4f5f7;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #0001;
+      max-width: 600px;
+      margin: auto;
+    }
+    .result-card {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 0 10px #0002;
+      display: none;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      background: #007bff;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    #copyBtn {
+      background: #28a745;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f0f2f4;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #e3e6e8;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Form Order</h2>
+
+  <form id="orderForm">
+    <label>Biaya</label>
+    <input name="biaya" required>
+
+    <label>Kapan</label>
+    <input name="kapan" type="date" required>
+
+    <label>Nama</label>
+    <input name="nama" required>
+
+    <label>No HP</label>
+    <input name="hp" required id="hp">
+
+    <label>Deskripsi</label>
+    <textarea name="deskripsi"></textarea>
+
+    <label>Jemput</label>
+    <input name="jemput">
+
+    <label>Antar</label>
+    <input name="antar">
+
+    <label>Agent</label>
+    <input name="agent">
+
+    <button class="btn" type="submit" id="submitBtn">SUBMIT</button>
+  </form>
+</div>
+
+<!-- HASIL TEMPLATE -->
+<div class="result-card" id="resultCard">
+  <h2>🟦 ORDER MASUK</h2>
+  <pre id="templateBox"></pre>
+  <button id="copyBtn" class="btn">COPY TEMPLATE</button>
+  <a id="chatBtn" class="btn" target="_blank">CHAT KE AGENT</a>
+</div>
+
 <script>
 const SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec";
 
-// --- VALIDASI NOMOR HP --- //
-const hpInput = document.querySelector("input[name='hp']");
+const hpInput = document.getElementById("hp");
 
+// Format nomor HP → harus 62xxxx tanpa spasi
 hpInput.addEventListener("input", function () {
-  // Hanya angka
-  let val = this.value.replace(/\D/g, "");
+  let v = this.value.replace(/\D/g, ""); // angka saja
 
-  // Hilangkan spasi
-  val = val.replace(/\s+/g, "");
-
-  // Wajib mulai dengan 62
-  if (!val.startsWith("62")) {
-    val = "62" + val.replace(/^0+/, "");
+  if (!v.startsWith("62")) {
+    v = "62" + v.replace(/^0+/, "");
   }
 
-  this.value = val;
+  this.value = v;
 });
 
-
-// --- SUBMIT FORM --- //
 document.getElementById("orderForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
-  const submitBtn = this.querySelector("button[type='submit']");
+  const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
   submitBtn.textContent = "⏳ Mengirim...";
-  submitBtn.style.opacity = "0.7";
 
   const form = new FormData(this);
 
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      body: form
-    });
+  // Backup form sebelum reset
+  const data = {};
+  form.forEach((v, k) => data[k] = v);
 
-    // Template hasil
-    const template = `
+  // Kirim ke Apps Script
+  await fetch(SCRIPT_URL, { method: "POST", body: form });
+
+  // Template aman (menggunakan backtick)
+  const template = `
 🟦 ORDER MASUK
 
-📦 Biaya: ${form.get("biaya")}
-📅 Kapan: ${form.get("kapan")}
-👤 Nama: ${form.get("nama")}
-📱 https://wa.me/${form.get("hp")}
-📝 Deskripsi: ${form.get("deskripsi") || "-"}
+📦 Biaya: ${data.biaya}
+📅 Kapan: ${data.kapan}
+👤 Nama: ${data.nama}
+📱 https://wa.me/${data.hp}
+📝 Deskripsi: ${data.deskripsi || "-"}
 
-📍 Jemput: ${form.get("jemput") || "-"}
-📍 Antar: ${form.get("antar") || "-"}
+📍 Jemput: ${data.jemput || "-"}
+📍 Antar: ${data.antar || "-"}
 
-🧑‍💼 Agent: ${form.get("agent")}
-    `.trim();
+🧑‍💼 Agent: ${data.agent}
+  `.trim();
 
-    // Tampilkan hasil
-    document.getElementById("templateBox").textContent = template;
-    document.getElementById("resultCard").style.display = "block";
+  document.getElementById("templateBox").textContent = template;
+  document.getElementById("resultCard").style.display = "block";
 
-    // Tombol chat agent
-    document.getElementById("chatBtn").href =
-      "intent://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc#Intent;scheme=https;package=com.whatsapp.w4b;end";
+  document.getElementById("chatBtn").href =
+    "intent://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc#Intent;scheme=https;package=com.whatsapp.w4b;end";
 
-    // Reset form
-    this.reset();
+  this.reset();
 
-  } catch (err) {
-    alert("Gagal mengirim data!");
-  }
-
-  // Balikkan tombol
   submitBtn.disabled = false;
   submitBtn.textContent = "SUBMIT";
-  submitBtn.style.opacity = "1";
 });
 
-
-// --- TOMBOL COPY TEMPLATE --- //
+// COPY BUTTON
 document.getElementById("copyBtn").addEventListener("click", async () => {
   try {
     await navigator.clipboard.writeText(
@@ -91,8 +173,11 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
       copyBtn.style.background = "#28a745";
     }, 1500);
 
-  } catch (err) {
+  } catch {
     alert("Gagal menyalin!");
   }
 });
 </script>
+
+</body>
+</html>
