@@ -89,14 +89,34 @@
 📍 Antar: ${formData.get("antar") || "-"}
 🧑‍💼 Agent: ${formData.get("agent") || "-"}`;
 
-          document.getElementById("templateOutput").textContent = template;
-          document.getElementById("resultBox").style.display = "block";
-        } else {
-          alert("Gagal mengirim data!");
-        }
-      } catch (err) {
-        alert("Error: " + err);
-      }
+  // Tampilkan template
+  document.getElementById("templateBox").textContent = template;
+  document.getElementById("resultCard").style.display = "block";
+
+  // Link ke grup
+  document.getElementById("chatBtn").href =
+    "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
+
+  // Reset form
+  this.reset();
+});
+
+// Tombol copy
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(
+      document.getElementById("templateBox").textContent
+    );
+    copyBtn.textContent = "✔ TERSALIN!";
+    copyBtn.style.background = "#1e7c33";
+
+    setTimeout(() => {
+      copyBtn.textContent = "COPY TEMPLATE";
+      copyBtn.style.background = "#28a745";
+    }, 1500);
+  } catch (err) {
+    alert("Gagal menyalin!");
+  }
 
       submitBtn.disabled = false;
       submitBtn.textContent = "SUBMIT";
@@ -104,3 +124,4 @@
   </script>
 </body>
 </html>
+
