@@ -26,7 +26,8 @@
     <input name="biaya" required>
 
     <label>Kapan</label>
-    <input name="kapan" required>
+    <!-- ✅ Date picker -->
+    <input name="kapan" type="date" required>
 
     <label>Nama</label>
     <input name="nama" required>
@@ -59,7 +60,7 @@
 </div>
 
 <script>
-const SCRIPT_URL = "PASTE_URL_WEB_APP_SCRIPT_KAMU";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec";
 
 document.getElementById("orderForm").addEventListener("submit", async function(e) {
   e.preventDefault();
@@ -84,15 +85,12 @@ document.getElementById("orderForm").addEventListener("submit", async function(e
 
 🧑‍💼 Agent: ${form.get("agent")}`.trim();
 
-  // Tampilkan template
   document.getElementById("templateBox").textContent = template;
   document.getElementById("resultCard").style.display = "block";
 
-  // Link ke grup
   document.getElementById("chatBtn").href =
     "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
 
-  // Reset form
   this.reset();
 });
 
