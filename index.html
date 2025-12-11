@@ -1,86 +1,106 @@
-<form id="orderForm">
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <title>Form Order - SuruhBoy</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-  <label>Biaya</label>
-  <input type="text" name="biaya" required>
+<body>
+  <div class="container">
+    <h2>Form Order</h2>
 
-  <label>Kapan</label>
-  <input type="date" name="kapan" required>
+    <form id="orderForm">
 
-  <label>Nama</label>
-  <input type="text" name="nama" required>
+      <label>📦 Biaya</label>
+      <input type="text" name="biaya" required />
 
-  <label>HP</label>
-  <input type="text" name="hp" required>
+      <label>📆 Kapan</label>
+      <!-- DIGANTI: DATE PICKER -->
+      <input type="date" name="kapan" required />
 
-  <label>Deskripsi</label>
-  <textarea name="deskripsi"></textarea>
+      <label>👤 Nama</label>
+      <input type="text" name="nama" required />
 
-  <label>Jemput</label>
-  <input type="text" name="jemput">
+      <label>📱 HP</label>
+      <input type="text" name="hp" required />
 
-  <label>Antar</label>
-  <input type="text" name="antar">
+      <label>📝 Deskripsi</label>
+      <textarea name="deskripsi"></textarea>
 
-  <label>Agent</label>
-  <input type="text" name="agent">
+      <label>📍 Jemput</label>
+      <input type="text" name="jemput" />
 
-  <button type="submit">Submit</button>
-</form>
+      <label>📍 Antar</label>
+      <input type="text" name="antar" />
 
-<!-- POPUP LOADING -->
-<div id="loadingPopup" style="
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,0.6);
-  color:white; font-size:22px;
-  display:flex; align-items:center;
-  justify-content:center; font-weight:bold;
-">
-  Sedang mengirim data...
-</div>
+      <label>🧑‍💼 Agent</label>
+      <input type="text" name="agent" />
 
-<!-- POPUP SUCCESS -->
-<div id="successPopup" style="
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,0.6);
-  color:white; font-size:22px;
-  display:flex; align-items:center;
-  justify-content:center; font-weight:bold;
-">
-  ✔ Data berhasil disimpan!
-</div>
+      <button type="submit" id="submitBtn">SUBMIT</button>
+    </form>
 
-<script>
-document.getElementById("orderForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+    <!-- TEMPAT TEMPLATE MUNCUL -->
+    <div id="resultBox" style="display:none; margin-top:20px;">
+      <h3>Template Order:</h3>
+      <pre id="templateOutput"></pre>
+    </div>
+  </div>
 
-    // Munculkan popup loading
-    document.getElementById("loadingPopup").style.display = "flex";
+  <script>
+    const form = document.getElementById("orderForm");
+    const submitBtn = document.getElementById("submitBtn");
 
-    const formData = new FormData(this);
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    fetch("https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.text())
-    .then(() => {
-        // Matikan loading
-        document.getElementById("loadingPopup").style.display = "none";
+      // POPUP SEDANG MENGIRIM DATA
+      alert("Sedang mengirim data...");
 
-        // Tampilkan success
-        document.getElementById("successPopup").style.display = "flex";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Mengirim...";
 
-        // Kosongkan form
-        document.getElementById("orderForm").reset();
+      const formData = new FormData(form);
 
-        setTimeout(() => {
-            document.getElementById("successPopup").style.display = "none";
-        }, 2000);
-    })
-    .catch(err => {
-        document.getElementById("loadingPopup").style.display = "none";
-        alert("Gagal mengirim data");
-        console.log(err);
+      try {
+        const response = await fetch(
+          "https://script.google.com/macros/s/AKfycbwaxxAA-_gJKxn6yP484HPrGgy5XZSwkhTGBe3dHYLm-Svssn4WM1EzDW1BYIHzRqXy/exec",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          alert("Berhasil tersimpan!"); // POPUP BERHASIL
+
+          form.reset(); // Kosongkan form
+
+          // generate template lokal (tanpa redirect)
+          const template = `🟦 ORDER MASUK
+
+📦 Biaya: ${formData.get("biaya")}
+📅 Kapan: ${formData.get("kapan")}
+👤 Nama: ${formData.get("nama")}
+📱 https://wa.me/${formData.get("hp")}
+📝 Deskripsi: ${formData.get("deskripsi") || "-"}
+📍 Jemput: ${formData.get("jemput") || "-"}
+📍 Antar: ${formData.get("antar") || "-"}
+🧑‍💼 Agent: ${formData.get("agent") || "-"}`;
+
+          document.getElementById("templateOutput").textContent = template;
+          document.getElementById("resultBox").style.display = "block";
+        } else {
+          alert("Gagal mengirim data!");
+        }
+      } catch (err) {
+        alert("Error: " + err);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = "SUBMIT";
     });
-});
-</script>
+  </script>
+</body>
+</html>
