@@ -1,119 +1,86 @@
-<!doctype html>
-<html lang="id">
-<head>
-  <meta charset="utf-8">
-  <title>Form Order - SuruhBoy</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+<form id="orderForm">
 
-  <style>
-    body { font-family: system-ui, sans-serif; background: #f4f5f7; padding: 20px; }
-    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px #0001; max-width: 600px; margin: auto; }
-    .result-card { margin-top: 20px; padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 0 10px #0002; display: none; }
-    .btn { display: block; width: 100%; padding: 14px; margin-top: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: white; background: #007bff; font-weight: bold; cursor: pointer; }
-    #copyBtn { background: #28a745; border: none; }
-    pre { white-space: pre-wrap; background: #f0f2f4; padding: 15px; border-radius: 10px; border: 1px solid #e3e6e8; }
-  </style>
-</head>
+  <label>Biaya</label>
+  <input type="text" name="biaya" required>
 
-<body>
+  <label>Kapan</label>
+  <input type="date" name="kapan" required>
 
-<div class="card">
-  <h2>Form Order</h2>
+  <label>Nama</label>
+  <input type="text" name="nama" required>
 
-  <form id="orderForm">
-    <label>Biaya</label>
-    <input name="biaya" required>
+  <label>HP</label>
+  <input type="text" name="hp" required>
 
-    <label>Kapan</label>
-    <input name="kapan" required>
+  <label>Deskripsi</label>
+  <textarea name="deskripsi"></textarea>
 
-    <label>Nama</label>
-    <input name="nama" required>
+  <label>Jemput</label>
+  <input type="text" name="jemput">
 
-    <label>No HP</label>
-    <input name="hp" required>
+  <label>Antar</label>
+  <input type="text" name="antar">
 
-    <label>Deskripsi</label>
-    <textarea name="deskripsi"></textarea>
+  <label>Agent</label>
+  <input type="text" name="agent">
 
-    <label>Jemput</label>
-    <input name="jemput">
+  <button type="submit">Submit</button>
+</form>
 
-    <label>Antar</label>
-    <input name="antar">
-
-    <label>Agent</label>
-    <input name="agent">
-
-    <button class="btn" type="submit">SUBMIT</button>
-  </form>
+<!-- POPUP LOADING -->
+<div id="loadingPopup" style="
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.6);
+  color:white; font-size:22px;
+  display:flex; align-items:center;
+  justify-content:center; font-weight:bold;
+">
+  Sedang mengirim data...
 </div>
 
-<!-- HASIL TEMPLATE -->
-<div class="result-card" id="resultCard">
-  <h2>🟦 ORDER MASUK</h2>
-  <pre id="templateBox"></pre>
-  <button id="copyBtn" class="btn">COPY TEMPLATE</button>
-  <a id="chatBtn" class="btn" target="_blank">CHAT KE AGENT</a>
+<!-- POPUP SUCCESS -->
+<div id="successPopup" style="
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,0.6);
+  color:white; font-size:22px;
+  display:flex; align-items:center;
+  justify-content:center; font-weight:bold;
+">
+  ✔ Data berhasil disimpan!
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec";
+document.getElementById("orderForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-document.getElementById("orderForm").addEventListener("submit", async function(e) {
-  e.preventDefault();
+    // Munculkan popup loading
+    document.getElementById("loadingPopup").style.display = "flex";
 
-  const form = new FormData(this);
+    const formData = new FormData(this);
 
-  // Submit ke Apps Script
-  await fetch(SCRIPT_URL, { method: "POST", body: form });
+    fetch("https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.text())
+    .then(() => {
+        // Matikan loading
+        document.getElementById("loadingPopup").style.display = "none";
 
-  // Buat template
-  const template = `
-🟦 ORDER MASUK
+        // Tampilkan success
+        document.getElementById("successPopup").style.display = "flex";
 
-📦 Biaya: ${form.get("biaya")}
-📅 Kapan: ${form.get("kapan")}
-👤 Nama: ${form.get("nama")}
-📱 https://wa.me/${form.get("hp")}
-📝 Deskripsi: ${form.get("deskripsi") || "-"}
+        // Kosongkan form
+        document.getElementById("orderForm").reset();
 
-📍 Jemput: ${form.get("jemput") || "-"}
-📍 Antar: ${form.get("antar") || "-"}
-
-🧑‍💼 Agent: ${form.get("agent")}`.trim();
-
-  // Tampilkan template
-  document.getElementById("templateBox").textContent = template;
-  document.getElementById("resultCard").style.display = "block";
-
-  // Link ke grup
-  document.getElementById("chatBtn").href =
-    "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
-
-  // Reset form
-  this.reset();
-});
-
-// Tombol copy
-document.getElementById("copyBtn").addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(
-      document.getElementById("templateBox").textContent
-    );
-    copyBtn.textContent = "✔ TERSALIN!";
-    copyBtn.style.background = "#1e7c33";
-
-    setTimeout(() => {
-      copyBtn.textContent = "COPY TEMPLATE";
-      copyBtn.style.background = "#28a745";
-    }, 1500);
-  } catch (err) {
-    alert("Gagal menyalin!");
-  }
+        setTimeout(() => {
+            document.getElementById("successPopup").style.display = "none";
+        }, 2000);
+    })
+    .catch(err => {
+        document.getElementById("loadingPopup").style.display = "none";
+        alert("Gagal mengirim data");
+        console.log(err);
+    });
 });
 </script>
-</body>
-</html>
-
