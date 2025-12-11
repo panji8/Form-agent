@@ -5,108 +5,114 @@
   <title>Form Order - SuruhBoy</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f4f5f7; padding: 20px; }
+    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px #0001; max-width: 600px; margin: auto; }
+    .result-card { margin-top: 20px; padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 0 10px #0002; display: none; }
+    .btn { display: block; width: 100%; padding: 14px; margin-top: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: white; background: #007bff; font-weight: bold; cursor: pointer; }
+    #copyBtn { background: #28a745; border: none; }
+    pre { white-space: pre-wrap; background: #f0f2f4; padding: 15px; border-radius: 10px; border: 1px solid #e3e6e8; }
+  </style>
 </head>
+
 <body>
 
-<div class="container">
-  <header class="header">
-    <div class="logo">✓</div>
-    <div>
-      <h1>Form Order</h1>
-      <p class="muted">Buat order baru & kirim ke agent</p>
-    </div>
-  </header>
+<div class="card">
+  <h2>Form Order</h2>
 
-  <main class="card">
+  <form id="orderForm">
+    <label>Biaya</label>
+    <input name="biaya" required>
 
-    <!-- FORM POST KE APPS SCRIPT -->
-    <form 
-      method="POST"
-      action="https://script.google.com/macros/s/AKfycbwePJlPITGX3XDfw5GaKiPhfuZmhM7J4ENvHs1hBzCmNr5FGMfpmk2pc0UpJZKirkWk/exec"
-    >
+    <label>Kapan</label>
+    <input name="kapan" required>
 
-      <label>Biaya</label>
-      <input id="biaya" name="biaya" placeholder="30000" required>
+    <label>Nama</label>
+    <input name="nama" required>
 
-      <label>Kapan</label>
-      <input id="kapan" type="date" name="kapan" required>
+    <label>No HP</label>
+    <input name="hp" required>
 
-      <label>Nama</label>
-      <input id="nama" name="nama" placeholder="Nama Customer" required>
+    <label>Deskripsi</label>
+    <textarea name="deskripsi"></textarea>
 
-      <label>No HP</label>
-      <input id="hp" name="hp" placeholder="6289..." required>
+    <label>Jemput</label>
+    <input name="jemput">
 
-      <label>Deskripsi</label>
-      <textarea id="deskripsi" name="deskripsi" placeholder="Catatan / kebutuhan"></textarea>
+    <label>Antar</label>
+    <input name="antar">
 
-      <label>Titik Jemput</label>
-      <input id="jemput" name="jemput" placeholder="Alamat jemput">
+    <label>Agent</label>
+    <input name="agent">
 
-      <label>Titik Antar</label>
-      <input id="antar" name="antar" placeholder="Alamat antar">
-
-      <label>Agent</label>
-      <select id="agent" name="agent" required>
-        <option value="">-- pilih agent --</option>
-        <option value="Panji">Panji</option>
-        <option value="Diar">Diar</option>
-        <option value="Rifki">Rifki</option>
-        <option value="Mukhlis">Mukhlis</option>
-        <option value="Angga Jaya">Angga Jaya</option>
-        <option value="Aryo">Aryo</option>
-        <option value="Mbak Yuni">Mbak Yuni</option>
-        <option value="Restu">Restu</option>
-        <option value="Agung">Agung</option>
-        <option value="Bagus">Bagus</option>
-        <option value="Yosi">Yosi</option>
-        <option value="Yusuf">Yusuf</option>
-      </select>
-
-      <button type="submit" class="primary">SUBMIT ORDER</button>
-
-    </form>
-
-  </main>
+    <button class="btn" type="submit">SUBMIT</button>
+  </form>
 </div>
 
+<!-- HASIL TEMPLATE -->
+<div class="result-card" id="resultCard">
+  <h2>🟦 ORDER MASUK</h2>
+  <pre id="templateBox"></pre>
+  <button id="copyBtn" class="btn">COPY TEMPLATE</button>
+  <a id="chatBtn" class="btn" target="_blank">CHAT KE AGENT</a>
+</div>
 
-<!-- ========================================= -->
-<!-- =========== VALIDASI BIAYA ============== -->
-<!-- ========================================= -->
 <script>
-  const biayaInput = document.getElementById("biaya");
+const SCRIPT_URL = "PASTE_URL_WEB_APP_SCRIPT_KAMU";
 
-  // Hanya boleh angka + rb + j / juta
-  biayaInput.addEventListener("input", function () {
-    this.value = this.value
-      .toLowerCase()
-      .replace(/[^0-9rbjtau\s\-]/g, ""); 
-  });
+document.getElementById("orderForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-  biayaInput.addEventListener("blur", function () {
-    let raw = this.value.toLowerCase().trim();
-    let number = raw;
+  const form = new FormData(this);
 
-    // 10rb → 10000
-    if (/^[0-9]+rb$/.test(raw)) {
-      number = parseInt(raw) * 1000;
-    }
+  // Submit ke Apps Script
+  await fetch(SCRIPT_URL, { method: "POST", body: form });
 
-    // 1jt → 1000000
-    if (/^[0-9]+jt$/.test(raw)) {
-      number = parseInt(raw) * 1000000;
-    }
+  // Buat template
+  const template = `
+🟦 ORDER MASUK
 
-    // 1juta → 1000000
-    if (/^[0-9]+juta$/.test(raw)) {
-      number = parseInt(raw) * 1000000;
-    }
+📦 Biaya: ${form.get("biaya")}
+📅 Kapan: ${form.get("kapan")}
+👤 Nama: ${form.get("nama")}
+📱 https://wa.me/${form.get("hp")}
+📝 Deskripsi: ${form.get("deskripsi") || "-"}
 
-    this.value = number;
-  });
+📍 Jemput: ${form.get("jemput") || "-"}
+📍 Antar: ${form.get("antar") || "-"}
+
+🧑‍💼 Agent: ${form.get("agent")}`.trim();
+
+  // Tampilkan template
+  document.getElementById("templateBox").textContent = template;
+  document.getElementById("resultCard").style.display = "block";
+
+  // Link ke grup
+  document.getElementById("chatBtn").href =
+    "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
+
+  // Reset form
+  this.reset();
+});
+
+// Tombol copy
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(
+      document.getElementById("templateBox").textContent
+    );
+    copyBtn.textContent = "✔ TERSALIN!";
+    copyBtn.style.background = "#1e7c33";
+
+    setTimeout(() => {
+      copyBtn.textContent = "COPY TEMPLATE";
+      copyBtn.style.background = "#28a745";
+    }, 1500);
+  } catch (err) {
+    alert("Gagal menyalin!");
+  }
+});
 </script>
-
 </body>
 </html>
-
