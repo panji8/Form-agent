@@ -7,12 +7,51 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    body { font-family: system-ui, sans-serif; background: #f4f5f7; padding: 20px; }
-    .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 0 10px #0001; max-width: 600px; margin: auto; }
-    .result-card { margin-top: 20px; padding: 20px; border-radius: 12px; background: #fff; box-shadow: 0 0 10px #0002; display: none; }
-    .btn { display: block; width: 100%; padding: 14px; margin-top: 10px; border-radius: 8px; text-align: center; text-decoration: none; color: white; background: #007bff; font-weight: bold; cursor: pointer; }
-    #copyBtn { background: #28a745; border: none; }
-    pre { white-space: pre-wrap; background: #f0f2f4; padding: 15px; border-radius: 10px; border: 1px solid #e3e6e8; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f4f5f7;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #0001;
+      max-width: 600px;
+      margin: auto;
+    }
+    .result-card {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      background: #fff;
+      box-shadow: 0 0 10px #0002;
+      display: none;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      background: #007bff;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    #copyBtn {
+      background: #28a745;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f0f2f4;
+      padding: 15px;
+      border-radius: 10px;
+      border: 1px solid #e3e6e8;
+    }
   </style>
 </head>
 
@@ -26,7 +65,6 @@
     <input name="biaya" required>
 
     <label>Kapan</label>
-    <!-- ✅ Date picker -->
     <input name="kapan" type="date" required>
 
     <label>Nama</label>
@@ -60,17 +98,21 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec";
+const SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxE2jugMmls3X7WSU1oA43HU_gxqq2Uq-d3B7NCtis44cvTeiROijP8Y68GfxvtJtjJ/exec";
 
-document.getElementById("orderForm").addEventListener("submit", async function(e) {
+document.getElementById("orderForm").addEventListener("submit", async function (e) {
   e.preventDefault();
 
   const form = new FormData(this);
 
   // Submit ke Apps Script
-  await fetch(SCRIPT_URL, { method: "POST", body: form });
+  await fetch(SCRIPT_URL, {
+    method: "POST",
+    body: form
+  });
 
-  // Buat template
+  // Template hasil
   const template = `
 🟦 ORDER MASUK
 
@@ -83,16 +125,19 @@ document.getElementById("orderForm").addEventListener("submit", async function(e
 📍 Jemput: ${form.get("jemput") || "-"}
 📍 Antar: ${form.get("antar") || "-"}
 
-🧑‍💼 Agent: ${form.get("agent")}`.trim();
+🧑‍💼 Agent: ${form.get("agent")}
+  `.trim();
 
-<script>
-document.getElementById("templateBox").textContent = template;
-document.getElementById("resultCard").style.display = "block";
+  // Tampilkan hasil
+  document.getElementById("templateBox").textContent = template;
+  document.getElementById("resultCard").style.display = "block";
 
-document.getElementById("chatBtn").href =
-  "intent://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc#Intent;scheme=https;package=com.whatsapp.w4b;end ";
+  // Tombol chat agent
+  document.getElementById("chatBtn").href =
+    "intent://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc#Intent;scheme=https;package=com.whatsapp.w4b;end";
 
-this.reset();
+  // Reset form
+  this.reset();
 });
 
 // Tombol copy
@@ -101,6 +146,7 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
     await navigator.clipboard.writeText(
       document.getElementById("templateBox").textContent
     );
+
     copyBtn.textContent = "✔ TERSALIN!";
     copyBtn.style.background = "#1e7c33";
 
@@ -108,12 +154,12 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
       copyBtn.textContent = "COPY TEMPLATE";
       copyBtn.style.background = "#28a745";
     }, 1500);
+
   } catch (err) {
     alert("Gagal menyalin!");
   }
 });
 </script>
+
 </body>
 </html>
-
-
