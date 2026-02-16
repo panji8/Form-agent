@@ -4,141 +4,174 @@
   <meta charset="utf-8">
   <title>Form Order - SuruhBoy</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link rel="stylesheet" href="style.css">
 
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #f4f5f7;
-      padding: 20px;
+    :root{
+      --bg:#f5f7fa;
+      --card:#ffffff;
+      --accent:#25D366;
+      --primary:#2563eb;
+      --muted:#6b7280;
     }
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #0001;
-      max-width: 600px;
-      margin: auto;
-    }
-    .result-card {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 12px;
-      background: #fff;
-      box-shadow: 0 0 10px #0002;
-      display: none;
-    }
-    .btn {
-      display: block;
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Arial; background:var(--bg); margin:0; color:#0f172a}
+    .container{max-width:980px; margin:36px auto; padding:20px}
+    .header{display:flex; align-items:center; gap:14px; margin-bottom:18px}
+    .logo{width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .muted{color:var(--muted); margin:0}
+    .card{background:var(--card); padding:22px; border-radius:14px; box-shadow:0 8px 20px rgba(2,6,23,0.06)}
+    label{display:block; margin-top:10px; font-weight:600; color:#0b1220}
+    input, textarea, select { width:100%; padding:12px; margin-top:6px; border-radius:10px; border:1px solid #e6eef6; background:#fbfdff }
+    textarea{min-height:90px}
+    .primary{display:inline-block; margin-top:14px; background:var(--primary); color:#fff; border:none; padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:700}
+    .center{display:flex; justify-content:center}
+    .result-card{max-width:600px; padding:24px; border-radius:16px; box-shadow:0 8px 20px rgb(0 0 0 / 0.08); background:white; margin:auto}
+    h2{margin-top:0; text-align:center; font-size:22px; font-weight:700}
+    #templateBox{background:#f0f2f4; padding:16px; border-radius:10px; white-space:pre-wrap; font-size:15px; line-height:1.55; border:1px solid #e3e6e8}
+    .btn{display:block; margin-top:16px; padding:14px; color:white; text-align:center; border-radius:10px; text-decoration:none; font-weight:600; transition:0.15s; cursor:pointer; user-select:none}
+    #chatBtn{background:#007bff}
+    #chatBtn:hover{opacity:0.9}
+    #copyBtn{background:#28a745; border:none}
+    #copyBtn:active{transform:scale(0.98)}
+    .quick-options{display:flex; gap:10px; margin-top:8px; flex-wrap:wrap}
+    .quick-option{background:#e9ecef; padding:8px 12px; border-radius:20px; font-size:14px; cursor:pointer; border:1px solid #ced4da; transition:all 0.2s}
+    .quick-option:hover{background:#007bff; color:white; border-color:#007bff}
+    
+    /* Style untuk searchable dropdown */
+    .dropdown-wrapper {
+      position: relative;
       width: 100%;
-      padding: 14px;
-      margin-top: 10px;
-      border-radius: 8px;
-      text-align: center;
-      text-decoration: none;
-      color: white;
-      background: #007bff;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
     }
-    #copyBtn {
-      background: #28a745;
-    }
-    pre {
-      white-space: pre-wrap;
-      background: #f0f2f4;
-      padding: 15px;
+    .dropdown-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e6eef6;
       border-radius: 10px;
-      border: 1px solid #e3e6e8;
+      background: #fbfdff;
+      cursor: pointer;
+    }
+    .dropdown-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: 250px;
+      overflow-y: auto;
+      background: white;
+      border: 1px solid #e6eef6;
+      border-radius: 10px;
+      margin-top: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 1000;
+    }
+    .dropdown-list.show {
+      display: block;
+    }
+    .dropdown-item {
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .dropdown-item:hover {
+      background: #f0f2f4;
+    }
+    .dropdown-item.selected {
+      background: #e3f2fd;
+      color: #1976d2;
+    }
+    .no-results {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-style: italic;
     }
   </style>
 </head>
 
 <body>
 
-<div class="card">
-  <h2>Form Order</h2>
+<div class="container">
+  <div class="header">
+    <div class="logo">SB</div>
+    <div>
+      <h2 style="margin:0">SuruhBoy</h2>
+      <p class="muted">Form Order</p>
+    </div>
+  </div>
 
-  <form id="orderForm">
-    <label>Biaya</label>
-    <input name="biaya" required>
+  <div class="card">
+    <form id="orderForm">
+      <label>Biaya</label>
+      <input name="biaya" required id="biaya">
+      <div class="quick-options">
+        <span class="quick-option" data-value="10rb diluar parkir">10rb diluar parkir</span>
+        <span class="quick-option" data-value="12rb diluar parkir">12rb diluar parkir</span>
+        <span class="quick-option" data-value="10.000">10.000</span>
+        <span class="quick-option" data-value="12.000">12.000</span>
+      </div>
 
-    <label>Kapan</label>
-    <input name="kapan" type="date" required>
+      <label>Kapan</label>
+      <input name="kapan" type="date" required>
 
-    <label>Nama</label>
-    <input name="nama" required>
+      <label>Nama</label>
+      <input name="nama" required>
 
-    <label>No HP</label>
-    <input name="hp" required id="hp">
+      <label>No HP</label>
+      <input name="hp" required id="hp">
 
-    <label>Deskripsi</label>
-    <textarea name="deskripsi"></textarea>
+      <label>Deskripsi</label>
+      <textarea name="deskripsi"></textarea>
 
-    <label>Jemput</label>
-    <input name="jemput">
+      <label>Jemput</label>
+      <input name="jemput">
 
-    <label>Antar</label>
-    <input name="antar">
+      <label>Antar</label>
+      <input name="antar">
 
-    <label>Agent</label>
-<select name="agent" required>
-  <option value="">-- Pilih Agent --</option>
-  <option>Agung</option>
-  <option>Agus</option>
-  <option>Andi</option>
-  <option>Aryo</option>
-  <option>Awa</option>
-  <option>Bagus</option>
-  <option>Diar</option>
-  <option>Lutfi Majid</option>
-  <option>Malek</option>
-  <option>Mbak Yuni</option>
-  <option>Naily</option>
-  <option>Nia</option>
-  <option>Panji</option>
-  <option>Restu</option>
-  <option>Akhmad Rifki</option>
-  <option>Yosi</option>
-  <option>Yusuf</option>
-  <option>Ilham</option>
-  <option>Barkah</option>
-  <option>Mukhlis</option>
-  <option>Kharisma</option>
-  <option>Ardi</option>
-  <option>Acil</option>
-  <option>Defita</option>
-  <option>Fajar</option>
-  <option>Ichsan</option>
-  <option>Gilang</option>
-  <option>Angga Aji</option>
-  <option>Putri Utami</option>
-  <option>Arif Ahmadi</option>
-  <option>Hana</option>
-  <option>Indah Rahayu</option>
-</select>
+      <label>Agent</label>
+      <!-- Searchable dropdown untuk Agent -->
+      <div class="dropdown-wrapper" id="agentDropdown">
+        <input type="text" class="dropdown-input" id="agentInput" placeholder="Ketik atau pilih agent..." autocomplete="off" required>
+        <input type="hidden" name="agent" id="agentHidden">
+        <div class="dropdown-list" id="dropdownList"></div>
+      </div>
 
-    <label>admin</label>
-    <input name="admin">
+      <label>admin</label>
+      <input name="admin">
 
-    <button class="btn" type="submit" id="submitBtn">SUBMIT</button>
-  </form>
+      <button class="primary" type="submit" id="submitBtn" style="width:100%">SUBMIT</button>
+    </form>
+  </div>
 </div>
 
-<!-- HASIL TEMPLATE -->
-<div class="result-card" id="resultCard">
-  <h2>🟦 ORDER MASUK</h2>
-  <pre id="templateBox"></pre>
-  <button id="copyBtn" class="btn">COPY TEMPLATE</button>
-  <a id="chatBtn" class="btn" target="_blank">CHAT KE AGENT</a>
+<!-- HASIL TEMPLATE (awalnya tersembunyi) -->
+<div class="container" id="resultContainer" style="display:none">
+  <div class="result-card">
+    <h2>🟦 ORDER MASUK</h2>
+    <pre id="templateBox"></pre>
+    <button id="copyBtn" class="btn">COPY TEMPLATE</button>
+    <a id="chatBtn" class="btn" target="_blank">CHAT KE AGENT</a>
+  </div>
 </div>
 
 <script>
 const SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbwinE9yP9HTE4WWdnvMpu0PJUGPnpBaWg9ENNdtQGMpaIE4bYcTHEyxRE1atiFWCTRv/exec";
 
+// Daftar agent
+const agentList = [
+  "Agung", "Agus", "Andi", "Aryo", "Awa", "Bagus", "Diar", "Lutfi Majid",
+  "Malek", "Mbak Yuni", "Naily", "Nia", "Panji", "Restu", "Akhmad Rifki",
+  "Yosi", "Yusuf", "Ilham", "Barkah", "Mukhlis", "Kharisma", "Ardi",
+  "Acil", "Defita", "Fajar", "Ichsan", "Gilang", "Angga Aji", "Putri Utami",
+  "Arif Ahmadi", "Hana", "Indah Rahayu"
+];
+
 const hpInput = document.getElementById("hp");
+const agentInput = document.getElementById("agentInput");
+const agentHidden = document.getElementById("agentHidden");
+const dropdownList = document.getElementById("dropdownList");
+const dropdownWrapper = document.getElementById("agentDropdown");
 
 // Format nomor HP → harus 62xxxx tanpa spasi
 hpInput.addEventListener("input", function () {
@@ -151,8 +184,69 @@ hpInput.addEventListener("input", function () {
   this.value = v;
 });
 
+// Quick options untuk biaya
+document.querySelectorAll('.quick-option').forEach(option => {
+  option.addEventListener('click', function() {
+    document.getElementById('biaya').value = this.dataset.value;
+  });
+});
+
+// Fungsi untuk menampilkan dropdown
+function showDropdown(filter = "") {
+  const filteredAgents = agentList.filter(agent => 
+    agent.toLowerCase().includes(filter.toLowerCase())
+  );
+  
+  if (filteredAgents.length === 0) {
+    dropdownList.innerHTML = '<div class="no-results">Tidak ada agent</div>';
+  } else {
+    dropdownList.innerHTML = filteredAgents.map(agent => 
+      `<div class="dropdown-item" data-value="${agent}">${agent}</div>`
+    ).join('');
+  }
+  
+  dropdownList.classList.add('show');
+}
+
+// Event listener untuk input agent
+agentInput.addEventListener('focus', () => {
+  showDropdown(agentInput.value);
+});
+
+agentInput.addEventListener('input', (e) => {
+  showDropdown(e.target.value);
+});
+
+// Klik di luar dropdown untuk menutup
+document.addEventListener('click', (e) => {
+  if (!dropdownWrapper.contains(e.target)) {
+    dropdownList.classList.remove('show');
+  }
+});
+
+// Event delegation untuk item dropdown
+dropdownList.addEventListener('click', (e) => {
+  const item = e.target.closest('.dropdown-item');
+  if (item) {
+    const value = item.dataset.value;
+    agentInput.value = value;
+    agentHidden.value = value;
+    dropdownList.classList.remove('show');
+  }
+});
+
+// Set hidden input saat submit
 document.getElementById("orderForm").addEventListener("submit", async function (e) {
   e.preventDefault();
+  
+  // Validasi agent tidak kosong
+  if (!agentInput.value.trim()) {
+    alert("Pilih atau ketik nama agent!");
+    return;
+  }
+  
+  // Set hidden input dengan nilai dari agentInput
+  agentHidden.value = agentInput.value;
 
   const submitBtn = document.getElementById("submitBtn");
   submitBtn.disabled = true;
@@ -184,12 +278,17 @@ document.getElementById("orderForm").addEventListener("submit", async function (
   `.trim();
 
   document.getElementById("templateBox").textContent = template;
-  document.getElementById("resultCard").style.display = "block";
+  document.getElementById("resultContainer").style.display = "block";
 
   document.getElementById("chatBtn").href =
-    "intent://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc#Intent;scheme=https;package=com.whatsapp.w4b;end";
+    "https://chat.whatsapp.com/DlIfRxaICuRCXc1ZndEDTc";
+
+  // Scroll ke hasil
+  document.getElementById("resultContainer").scrollIntoView({ behavior: "smooth" });
 
   this.reset();
+  agentInput.value = ""; // Reset input agent
+  agentHidden.value = "";
 
   submitBtn.disabled = false;
   submitBtn.textContent = "SUBMIT";
@@ -202,6 +301,7 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
       document.getElementById("templateBox").textContent
     );
 
+    const copyBtn = document.getElementById("copyBtn");
     copyBtn.textContent = "✔ TERSALIN!";
     copyBtn.style.background = "#1e7c33";
 
@@ -218,15 +318,3 @@ document.getElementById("copyBtn").addEventListener("click", async () => {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
